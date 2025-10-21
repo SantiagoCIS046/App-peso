@@ -83,6 +83,16 @@ const guardarRegistro = () => {
   peso.value = "";
   estatura.value = "";
 };
+
+const eliminarRegistro = (index) => {
+  if (confirm("¿Estás seguro de que quieres eliminar este registro?")) {
+    registros.value.splice(index, 1);
+    // Reasignar números de registro
+    registros.value.forEach((reg, i) => {
+      reg.numero = i + 1;
+    });
+  }
+};
 </script>
 
 <template>
@@ -170,18 +180,24 @@ const guardarRegistro = () => {
                 <th>Peso (kg)</th>
                 <th>Estatura (cm)</th>
                 <th>IMC</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="registro in registros" :key="registro.numero">
+              <tr v-for="(registro, index) in registros" :key="registro.numero">
                 <td>{{ registro.numero }}</td>
                 <td>{{ registro.nombre }}</td>
                 <td>{{ registro.peso }}</td>
                 <td>{{ registro.estatura }}</td>
                 <td>{{ registro.imc }}</td>
+                <td>
+                  <button @click="eliminarRegistro(index)" class="btn-delete">
+                    Eliminar
+                  </button>
+                </td>
               </tr>
               <tr v-if="registros.length === 0">
-                <td colspan="5" class="no-records">
+                <td colspan="6" class="no-records">
                   No hay registros aún. Calcula tu IMC para comenzar.
                 </td>
               </tr>
@@ -301,6 +317,22 @@ input::placeholder {
 .btn-calculate:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-delete {
+  padding: 6px 12px;
+  background: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-delete:hover {
+  background: #c53030;
 }
 
 .result-card {
